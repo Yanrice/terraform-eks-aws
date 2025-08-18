@@ -5,6 +5,12 @@ terraform {
       version = "~> 5.0"
     }
   }
+  backend "s3" {
+    bucket         = "my-terraform-state-bucket" # Replace with your S3 bucket name
+    key            = "eks/terraform.tfstate"     # Path within the bucket
+    region         = "us-east-1"                 # Must match var.aws_region
+    dynamodb_table = "terraform-locks"           # Optional: For state locking
+  }
 }
 
 provider "aws" {
@@ -44,9 +50,8 @@ module "eks" {
 
   cluster_name    = var.cluster_name
   cluster_version = var.cluster_version
-
-  vpc_id     = module.vpc.vpc_id
-  subnet_ids = module.vpc.private_subnets
+  vpc_id          = module.vpc.vpc_id
+  subnet_ids      = module.vpc.private_subnets
 
   eks_managed_node_groups = {
     default = {
