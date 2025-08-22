@@ -10,6 +10,7 @@ terraform {
     key            = "eks/terraform.tfstate"     # Path within the bucket
     region         = "us-east-1"                 # Must match var.aws_region
     dynamodb_table = "terraform-locks"           # Optional: For state locking
+    use_lockfile = true
   }
 }
 
